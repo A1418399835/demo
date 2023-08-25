@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context
+	   https://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:component-scan base-package="com.example.demo.biz"></context:component-scan>
+
+<!--让spring框架加载我数据源配置文件-->
+    <context:property-placeholder location="classpath:dataSource.properties" system-properties-mode="NEVER"></context:property-placeholder>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${driver}"></property>
+        <property name="url" value="${url}"></property>
+        <property name="username" value="${uid}"></property>
+        <property name="password" value="${pwd}"></property>
+    </bean>
+
+<!--    托管一个连接（会话）工厂-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+<!--    配置数据访问层组件的扫描位置-->
+<bean id="mapper" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="com.example.demo.dao"></property>
+</bean>
+
+</beans>
